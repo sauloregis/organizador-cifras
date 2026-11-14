@@ -844,3 +844,195 @@ code {
 .p > .l {
   white-space: pre;
 }
+
+/* ---------- arrastar ---------- */
+
+.drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 40px;
+  flex: none;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: grab;
+  touch-action: none; /* no celular, arrastar pela alça não rola a página */
+  border-radius: 8px;
+}
+.drag-handle:active {
+  cursor: grabbing;
+  background: var(--bg3);
+}
+li.dragging,
+.dragging {
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.35);
+  opacity: 0.95;
+}
+.arr-item {
+  padding-left: 2px;
+}
+.item-top .drag-handle {
+  margin-left: -6px;
+}
+
+/* ---------- editor visual ---------- */
+
+.editor-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+.ed {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ed-measure {
+  position: absolute;
+  visibility: hidden;
+  font-family: var(--mono);
+  font-size: 14px;
+  white-space: pre;
+}
+.ed-tips {
+  margin: 0;
+}
+.chord-text {
+  color: var(--chord);
+}
+.ed-sec {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--tc);
+  border-radius: var(--radius);
+  padding: 8px 8px 4px;
+}
+.ed-sec-head {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.ed-sec-head select {
+  width: auto;
+  flex: none;
+  min-height: 36px;
+  padding: 4px 8px;
+  font-weight: 700;
+  color: var(--tc);
+  filter: brightness(1.2);
+}
+:root[data-theme='light'] .ed-sec-head select {
+  filter: none;
+}
+.ed-sec-head input {
+  min-height: 36px;
+  padding: 4px 10px;
+  font-weight: 600;
+  flex: 1;
+  min-width: 0;
+}
+.ed-lines {
+  overflow-x: auto;
+  min-height: 36px;
+  border-radius: 8px;
+  padding: 2px 0;
+}
+.ed-lines.over {
+  background: var(--bg3);
+}
+.ed-drop-hint {
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 10px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+}
+.ed-line {
+  display: flex;
+  align-items: flex-start;
+  min-width: max-content;
+  background: var(--bg2);
+}
+.ed-line .drag-handle {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  height: auto;
+  min-height: 32px;
+  align-self: stretch;
+  background: var(--bg2);
+}
+.ed-line-body {
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.5;
+  padding-right: 12px;
+}
+.ed-chords {
+  position: relative;
+  height: 1.6em;
+  cursor: copy;
+}
+.ed-chord {
+  position: absolute;
+  top: 0.05em;
+  color: var(--chord);
+  font-weight: 700;
+  white-space: pre;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--chord) 14%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--chord) 30%, transparent);
+}
+.ed-chord.moving {
+  z-index: 30;
+  cursor: grabbing;
+  background: var(--chord);
+  color: var(--accent-text);
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.4);
+}
+.ed-lyric,
+.ed-tab {
+  white-space: pre;
+  cursor: text;
+  min-height: 1.5em;
+}
+.ed-tab {
+  color: var(--muted);
+}
+.ed-empty {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-family: var(--sans);
+  opacity: 0.6;
+  padding: 6px 0;
+}
+.ed-overlay {
+  font-family: var(--mono);
+  font-size: 14px;
+  background: var(--bg3);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 6px 10px;
+  white-space: pre;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.4);
+  max-width: 90vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sheet-preview {
+  white-space: pre;
+  overflow-x: auto;
+  background: var(--bg2);
+  padding: 8px;
+  border-radius: 8px;
+}

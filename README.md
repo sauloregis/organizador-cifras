@@ -67,12 +67,32 @@ Letra do refrão
 - O nome/artista no topo (como vem do site) preenche os campos sozinhos.
 - O tipo da parte (refrão, ponte, intro…) é reconhecido pelo nome e ganha uma cor.
 
+## Importar PDF
+
+Em **Músicas → PDF** (ou **Importar PDF** dentro do editor). O app lê a posição de cada acorde no
+PDF e encontra a sílaba exata embaixo dele, mesmo em fontes de largura variável. Se a cifra não tiver
+os nomes das partes, ela é separada pelos parágrafos e classificada sozinha (refrão = parte que se repete;
+ponte = parte única depois do 2º refrão; linhas só de acordes no início/fim = Intro/Final).
+PDFs que são foto/digitalização não têm texto e não podem ser lidos.
+
+## Editor visual
+
+- Arraste um acorde para outra sílaba ou outra linha; toque nele para editar ou apagar.
+- Toque no espaço acima da letra para adicionar um acorde; toque na letra para editá-la.
+- Arraste ⋮⋮ para mover linhas, inclusive para outra parte; toque em ⋮⋮ para dividir a parte ali.
+- Cada parte tem um seletor de classificação (Refrão, Ponte, Estrofe…).
+- A ordem das partes e a ordem das músicas do repertório também se mudam arrastando.
+
 ## Estrutura
 
 ```
 src/
   lib/chords.ts      reconhecimento de acordes, transposição, quebra de linha sem desalinhar
   lib/songText.ts    texto ⇄ partes da música e ordem (arranjo)
+  lib/pdfImport.ts   leitura de PDF (pdf.js) alinhando acordes às sílabas
+  lib/autoSection.ts separação e classificação automática das partes
+  lib/editorModel.ts modelo do editor visual (linhas e acordes com posição)
+  components/SectionsEditor  editor visual com arrastar e soltar
   lib/db.ts          IndexedDB, importação com controle de versão
   lib/share.ts       link comprimido, arquivo, menu de compartilhar do celular
   lib/hooks.ts       rolagem automática, tela sempre acesa, tap tempo

@@ -25,6 +25,10 @@ const PATHS: Record<string, string> = {
   tap: 'M9 11V5a2 2 0 014 0v6M13 10a2 2 0 014 0v2M17 11a2 2 0 014 0v3a7 7 0 01-7 7h-1a7 7 0 01-6-3.4L4.3 14a2 2 0 013.4-2l1.3 1.6',
   reset: 'M3 12a9 9 0 109-9 9.7 9.7 0 00-6.7 2.8L3 8M3 3v5h5',
   check: 'M5 12l5 5L20 7',
+  grip: 'M9 5h.01M15 5h.01M9 12h.01M15 12h.01M9 19h.01M15 19h.01',
+  more: 'M12 5h.01M12 12h.01M12 19h.01',
+  pdf: 'M14 3H6v18h12V7zM14 3v4h4M9 13h1.5a1.5 1.5 0 010 3H9v-5M15 16v-5h2M15 13.5h1.5',
+  wand: 'M15 4V2M15 10V8M11 6h2M17 6h2M4 20L14 10M18 13l1 1M20 11l-1 1',
 };
 
 export function Icon({ name, size = 22 }: { name: keyof typeof PATHS | string; size?: number }) {
@@ -35,7 +39,7 @@ export function Icon({ name, size = 22 }: { name: keyof typeof PATHS | string; s
       viewBox="0 0 24 24"
       fill={name === 'play' || name === 'pause' ? 'currentColor' : 'none'}
       stroke="currentColor"
-      strokeWidth={2}
+      strokeWidth={name === 'grip' || name === 'more' ? 3.2 : 2}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"

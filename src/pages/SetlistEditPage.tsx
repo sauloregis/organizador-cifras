@@ -10,6 +10,7 @@ import { KeyPicker } from '../components/KeyPicker';
 import { ArrangementEditor } from '../components/ArrangementEditor';
 import { ShareDialog } from '../components/ShareDialog';
 import { Icon } from '../components/Icon';
+import { SortableList } from '../components/SortableList';
 
 const sameOrder = (a?: string[], b?: string[]) => !!a && !!b && a.length === b.length && a.every((x, i) => x === b[i]);
 
@@ -54,15 +55,6 @@ export function SetlistEditPage() {
 
   const updateItem = (itemId: string, patch: Partial<SetlistItem>) =>
     update((s) => ({ ...s, items: s.items.map((i) => (i.id === itemId ? { ...i, ...patch } : i)) }));
-
-  const moveItem = (index: number, d: number) =>
-    update((s) => {
-      const j = index + d;
-      if (j < 0 || j >= s.items.length) return s;
-      const items = [...s.items];
-      [items[index], items[j]] = [items[j], items[index]];
-      return { ...s, items };
-    });
 
   const addSong = (song: Song) =>
     update((s) => ({ ...s, items: [...s.items, { id: newId(), songId: song.id }] }));
@@ -132,29 +124,24 @@ export function SetlistEditPage() {
       </div>
 
       <h3>Músicas ({setlist.items.length})</h3>
-      <ol className="items">
-        {setlist.items.map((item, index) => {
+      <SortableList
+        className="items"
+        items={setlist.items}
+        getId={(item) => item.id}
+        onReorder={(items) => update((s) => ({ ...s, items }))}
+        itemClassName={() => 'item-card'}
+        render={(item, index, handle) => {
           const song = songMap.get(item.songId);
           const open = openItem === item.id;
           return (
-            <li key={item.id} className="item-card">
+            <>
               <div className="item-top">
+                {handle}
                 <span className="num">{index + 1}</span>
                 <div className="grow">
                   <div className="row-title">{song?.title ?? 'Música não encontrada'}</div>
                   {song?.artist && <div className="muted small">{song.artist}</div>}
                 </div>
-                <button className="icon-btn sm" onClick={() => moveItem(index, -1)} disabled={index === 0} aria-label="Subir">
-                  <Icon name="up" size={18} />
-                </button>
-                <button
-                  className="icon-btn sm"
-                  onClick={() => moveItem(index, 1)}
-                  disabled={index === setlist.items.length - 1}
-                  aria-label="Descer"
-                >
-                  <Icon name="down" size={18} />
-                </button>
                 <button
                   className="icon-btn sm"
                   onClick={() => update((s) => ({ ...s, items: s.items.filter((i) => i.id !== item.id) }))}
@@ -200,10 +187,11 @@ export function SetlistEditPage() {
                   </label>
                 </div>
               )}
-            </li>
+            </>
           );
-        })}
-      </ol>
+        }}
+      />
+      {setlist.items.length > 1 && <p className="muted small">Arraste pela alça para mudar a ordem das músicas.</p>}
       <button className="btn block" onClick={() => setPicking(true)}>
         <Icon name="plus" /> Adicionar músicas
       </button>

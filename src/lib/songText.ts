@@ -150,7 +150,9 @@ export function parseSongText(text: string, existing: Section[] = []): ParsedSon
     while (usedIds.has(id)) id = `${slug(label)}-${n++}`;
     usedIds.add(id);
 
-    const section: Section = { id, label, type: sectionTypeFromLabel(label), content };
+    // mantém a classificação escolhida à mão quando a parte já existia com esse nome
+    const keepType = prev && prev.id === id ? prev.type : undefined;
+    const section: Section = { id, label, type: keepType ?? sectionTypeFromLabel(label), content };
     sections.push(section);
     same.push(section);
     byLabel.set(baseLabel.toLowerCase(), same);

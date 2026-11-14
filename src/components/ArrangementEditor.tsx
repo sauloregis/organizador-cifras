@@ -1,4 +1,5 @@
 import type { Section } from '../lib/types';
+import { SortableList } from './SortableList';
 import { Icon } from './Icon';
 
 interface Props {
@@ -10,40 +11,27 @@ interface Props {
   resetLabel?: string;
 }
 
-/** Monta a ordem das partes: toque numa parte para adicioná-la; use ↑ ↓ ✕ para organizar. */
+/** Ordem das partes: arraste pela alça para reordenar; toque numa parte embaixo para adicioná-la. */
 export function ArrangementEditor({ sections, value, onChange, defaultOrder, resetLabel }: Props) {
   const map = new Map(sections.map((s) => [s.id, s]));
   const items = value.filter((id) => map.has(id));
 
-  const move = (i: number, d: number) => {
-    const j = i + d;
-    if (j < 0 || j >= items.length) return;
-    const next = [...items];
-    [next[i], next[j]] = [next[j], next[i]];
-    onChange(next);
-  };
-
   return (
     <div className="arr">
-      <ol className="arr-list">
-        {items.map((id, i) => {
-          const s = map.get(id)!;
-          return (
-            <li key={`${id}-${i}`} className={`arr-item t-${s.type}`}>
+      {items.length === 0 ? (
+        <p className="muted small">Nenhuma parte. Toque abaixo para adicionar.</p>
+      ) : (
+        <SortableList
+          className="arr-list"
+          items={items}
+          getId={(id, i) => `${id}#${i}`}
+          onReorder={onChange}
+          itemClassName={(id) => `arr-item t-${map.get(id)!.type}`}
+          render={(id, i, handle) => (
+            <>
+              {handle}
               <span className="arr-n">{i + 1}</span>
-              <span className="arr-label">{s.label}</span>
-              <button type="button" className="icon-btn sm" onClick={() => move(i, -1)} disabled={i === 0} aria-label="Subir">
-                <Icon name="up" size={18} />
-              </button>
-              <button
-                type="button"
-                className="icon-btn sm"
-                onClick={() => move(i, 1)}
-                disabled={i === items.length - 1}
-                aria-label="Descer"
-              >
-                <Icon name="down" size={18} />
-              </button>
+              <span className="arr-label">{map.get(id)!.label}</span>
               <button
                 type="button"
                 className="icon-btn sm"
@@ -52,11 +40,10 @@ export function ArrangementEditor({ sections, value, onChange, defaultOrder, res
               >
                 <Icon name="close" size={18} />
               </button>
-            </li>
-          );
-        })}
-        {items.length === 0 && <li className="muted small">Nenhuma parte. Toque abaixo para adicionar.</li>}
-      </ol>
+            </>
+          )}
+        />
+      )}
       <div className="arr-palette">
         <span className="muted small">Adicionar:</span>
         {sections.map((s) => (
